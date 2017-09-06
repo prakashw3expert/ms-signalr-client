@@ -101,8 +101,11 @@
         },
 
         supportsKeepAlive = function (connection) {
+          if(connection.transport){
             return connection._.keepAliveData.activated &&
                    connection.transport.supportsKeepAlive(connection);
+          }
+
         },
 
         configureStopReconnectingTimeout = function (connection) {
@@ -918,9 +921,9 @@
             if (connection.transport) {
                 connection.transport.stop(connection);
 
-                if (notifyServer !== false) {
-                    connection.transport.abort(connection, async);
-                }
+                // if (notifyServer !== false) {
+                //     connection.transport.abort(connection, async);
+                // }
 
                 if (supportsKeepAlive(connection)) {
                     signalR.transports._logic.stopMonitoringKeepAlive(connection);
@@ -950,7 +953,7 @@
 
             // Clear out our message buffer
             connection._.connectingMessageBuffer.clear();
-            
+
             // Clean up this event
             $(connection).unbind(events.onStart);
 
